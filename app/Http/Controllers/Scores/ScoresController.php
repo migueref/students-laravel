@@ -9,32 +9,6 @@ use App\Score;
 
 class ScoresController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
           $rules = [
@@ -52,47 +26,27 @@ class ScoresController extends Controller
           $score = Score::create($data);
           return response()->json(['success' => 'ok','msg' => 'calificacion registrada'], 201);
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $grade = Score::findOrFail($id);
+        $rules = [
+          'id_t_materias' => 'required',
+          'id_t_usuarios' => 'required',
+          'calificacion' => 'required|numeric|between:0.00,99.99',
+        ];
+        if ($request->has('id_t_materias') && $grade->id_t_materias != $request->id_t_materias) {
+          $grade->id_t_materias = $request->id_t_materias;
+        }
+        if ($request->has('id_t_usuarios') && $grade->id_t_usuarios != $request->id_t_usuarios) {
+          $grade->id_t_usuarios = $request->id_t_usuarios;
+        }
+        if ($request->has('calificacion') && $grade->calificacion != $request->calificacion) {
+          $grade->calificacion = $request->calificacion;
+        }
+        $grade->save();
+        return response()->json(['success' => 'ok','msg' => 'calificacion actualizada'], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //
