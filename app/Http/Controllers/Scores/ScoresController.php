@@ -49,6 +49,8 @@ class ScoresController extends Controller
 
     public function destroy($id)
     {
-        //
+          $grade = Score::findOrFail($id);
+          $grade->delete();
+          return response()->json(['success' => 'ok','msg' => 'calificacion eliminada'], 200);
     }
 }
